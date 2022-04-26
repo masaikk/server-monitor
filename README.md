@@ -4,12 +4,12 @@
 多服务器集群监视器
 
 #### 软件架构
-软件架构说明
+regulator文件夹是服务器后端
 
 
 #### 安装教程
 
-1.  xxxx
+1.  git clone
 2.  xxxx
 3.  xxxx
 
