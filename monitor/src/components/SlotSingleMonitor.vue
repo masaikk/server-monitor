@@ -4,12 +4,14 @@
     <slot></slot>
     <div>{{ ip }}</div>
     <el-button @click="sendAxiosTest(ip)">click</el-button>
+    <div v-for="(item, index) in out.data" :key="index">{{ item?.result }}</div>
   </div>
 </template>
 
 <script lang="ts">
 import axios from "axios";
-import { toRef } from "vue";
+import { reactive, toRef, onMounted } from "vue";
+import type { fullInfo } from "@/types";
 // eslint-disable-next-line
 import type { Ref } from "vue";
 
@@ -21,19 +23,30 @@ export default {
   // eslint-disable-next-line
   setup(props: any) {
     const ip = toRef(props, "ip");
+    let out: any = reactive({
+      data: [],
+    });
+    onMounted(() => {
+      setInterval(() => {
+        sendAxiosTest(ip.value);
+      }, 1000);
+    });
     const sendAxiosTest = (ip: string) => {
       axios
-        .get("http://" + ip, {
+        .get("http://" + ip + "/full", {
           params: {},
         })
         .then((res) => {
-          console.log(res);
+          console.log(res.data);
+          out.data = res.data;
         });
     };
+
     return {
       // eslint-disable-next-line vue/no-dupe-keys
       ip,
       sendAxiosTest,
+      out,
     };
   },
 };
@@ -43,7 +56,7 @@ export default {
 #holder {
   border: 2px dashed black;
   background: aquamarine;
-  width: 50%;
+  width: 80%;
   margin: 20px auto;
 }
 </style>

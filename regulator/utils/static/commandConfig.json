@@ -8,8 +8,12 @@
     },
     {
       "com": "ls -l | grep *.js"
-    },{
+    },
+    {
       "com": "free"
+    },
+    {
+      "com": "date"
     }
   ]
 }
