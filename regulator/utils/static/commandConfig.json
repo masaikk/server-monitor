@@ -1,0 +1,15 @@
+{
+  "commands": [
+    {
+      "com": "uname -a"
+    },
+    {
+      "com": "uname"
+    },
+    {
+      "com": "ls -l | grep *.js"
+    },{
+      "com": "free"
+    }
+  ]
+}
