@@ -1,10 +1,19 @@
 const router = require('./router');
 const cors = require('./utils/koa_cors');
 const koa = require('koa');
-const {stdout} = require("nodemon/lib/config/defaults");
-const app = new koa();
-const exec = require('child_process').exec
 
+const app = new koa();
+
+
+// cors
+app.use(cors({
+    origin: (ctx) => ctx.request.header.origin,
+    exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+    maxAge: 5,
+    credentials: true,
+    allowMethods: ['GET', 'POST', 'DELETE'],
+    allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+}));
 app.use(router.routes())
 
 
