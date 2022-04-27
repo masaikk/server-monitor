@@ -2,6 +2,8 @@ const Router = require('koa-router');
 const router = new Router();
 const api=require('../api')
 
-router.get('/', api.getTest);
+router.get('/test', api.getTest);
+router.get('/',api.getIndex)
+router.get('/cpu',api.getCpuInfo)
 
 module.exports = router;

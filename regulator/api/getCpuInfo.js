@@ -1,11 +1,14 @@
 const exec = require('child_process').exec;
-const ex = async () => {
+const getCpu = async () => {
     return new Promise((resolve, reject) => {
-        exec('echo a1', (err, stdout, stderr) => {
+        exec('cat /proc/cpuinfo', (err, stdout, stderr) => {
                 if (err) {
                     throw err;
                 } else {
-                    resolve(stdout)
+                    // 这个setTimeout意义不大
+                    setTimeout(()=>{
+                        resolve(stdout)
+                    })
                 }
             }
         )
@@ -13,7 +16,7 @@ const ex = async () => {
 }
 
 module.exports = async (ctx, next) => {
-    let bodyMess = await ex()
+    let bodyMess = await getCpu()
     ctx.response.code = 200
     ctx.response.body = bodyMess
 
