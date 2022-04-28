@@ -1,9 +1,8 @@
 <template>
   <div id="holder">
     <div id="header">using {{ ip }} ...</div>
-    <slot></slot>
-    <div>{{ ip }}</div>
-    <el-button @click="sendAxiosTest(ip)">click</el-button>
+
+    <el-button @click="getFullInfo(ip)">强制刷新信息</el-button>
     <div v-for="(item, index) in out.data" :key="index">{{ item?.result }}</div>
   </div>
 </template>
@@ -12,8 +11,6 @@
 import axios from "axios";
 import { reactive, toRef, onMounted } from "vue";
 import type { fullInfo } from "@/types";
-// eslint-disable-next-line
-import type { Ref } from "vue";
 
 export default {
   name: "SlotSingleMonitor",
@@ -23,17 +20,22 @@ export default {
   // eslint-disable-next-line
   setup(props: any) {
     const ip = toRef(props, "ip");
-    let out: any = reactive({
+    let outRawData: { data: Array<fullInfo> } = {
       data: [],
-    });
+    };
+    // eslint-disable-next-line
+    let out: any = reactive(outRawData);
+
+    // 在挂载之后每过5000ms就自动询问信息
     onMounted(() => {
+      getFullInfo(ip.value);
       setInterval(() => {
-        sendAxiosTest(ip.value);
-      }, 1000);
+        getFullInfo(ip.value);
+      }, 5000);
     });
-    const sendAxiosTest = (ip: string) => {
+    const getFullInfo = (ip: string) => {
       axios
-        .get("http://" + ip + "/full", {
+        .get(ip + "/full", {
           params: {},
         })
         .then((res) => {
@@ -45,7 +47,7 @@ export default {
     return {
       // eslint-disable-next-line vue/no-dupe-keys
       ip,
-      sendAxiosTest,
+      getFullInfo,
       out,
     };
   },
